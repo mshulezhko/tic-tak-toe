@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Square from "./Square";
 
 const Board: React.FC = () => {
@@ -8,6 +8,46 @@ const Board: React.FC = () => {
   const [squares, setSquares] = useState<(string | null)[]>(
     Array(9).fill(null)
   );
+
+  const calculateWinner = () => {
+    const variants = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    for (let i = 0; i < variants.length; i++) {
+      console.log("variants[i]");
+      console.log(variants[i]);
+      const [a, b, c] = variants[i];
+
+      if (
+        squares[a] &&
+        squares[a] === squares[b] &&
+        squares[a] === squares[c]
+      ) {
+        return squares[a];
+      }
+    }
+    return null;
+  };
+
+  useEffect(() => {
+    const newWinner = calculateWinner();
+
+    if (newWinner) {
+      setWinner(newWinner);
+    }
+
+    if (!newWinner && !squares.filter((el) => !el).length) {
+      setWinner("It's a Draw");
+    }
+  }, [squares]);
 
   const setSquareValue = (index: number) => {
     const newData: (string | null)[] = squares.map((val, i) => {
@@ -22,8 +62,15 @@ const Board: React.FC = () => {
     setCurrentPlayer(currentPlayer === "X" ? "O" : "X");
   };
 
+  const reset = () => {
+    setWinner(null);
+    setCurrentPlayer("X");
+    setSquares(Array(9).fill(null));
+  };
+
   return (
     <div className="board">
+      <h1>{winner}</h1>
       <div className="board-header">Hello{currentPlayer}</div>
       <div className="grid">
         {squares.map((_, i) => {
@@ -36,6 +83,10 @@ const Board: React.FC = () => {
             />
           );
         })}
+      </div>
+
+      <div>
+        <button onClick={reset}>play again</button>
       </div>
     </div>
   );
