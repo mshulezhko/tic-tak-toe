@@ -9,6 +9,7 @@ const Board: React.FC = () => {
     Array(9).fill(null)
   );
 
+  ///utils
   const calculateWinner = () => {
     const variants = [
       [0, 1, 2],
@@ -49,6 +50,7 @@ const Board: React.FC = () => {
     }
   }, [squares]);
 
+  //not single game
   const setSquareValue = (index: number) => {
     const newData: (string | null)[] = squares.map((val, i) => {
       if (i === index) {
@@ -62,11 +64,16 @@ const Board: React.FC = () => {
     setCurrentPlayer(currentPlayer === "X" ? "O" : "X");
   };
 
+  ///utils
+
   const reset = () => {
     setWinner(null);
     setCurrentPlayer("X");
     setSquares(Array(9).fill(null));
   };
+
+  //single game
+  const setSquareValueAI = () => {};
 
   return (
     <div className="board">
