@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Square from "./Square";
+import Square from "../Square";
+import calculateWinner from "@/app/utils/calculateWinner";
 
-const Board: React.FC = () => {
+const MultiGameBoard: React.FC = () => {
   const [winner, setWinner] = useState<string | null>(null);
   const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X");
   const [squares, setSquares] = useState<(string | null)[]>(
@@ -10,36 +11,36 @@ const Board: React.FC = () => {
   );
 
   ///utils
-  const calculateWinner = () => {
-    const variants = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
+  // const calculateWinner = () => {
+  //   const variants = [
+  //     [0, 1, 2],
+  //     [3, 4, 5],
+  //     [6, 7, 8],
+  //     [0, 3, 6],
+  //     [1, 4, 7],
+  //     [2, 5, 8],
+  //     [0, 4, 8],
+  //     [2, 4, 6],
+  //   ];
 
-    for (let i = 0; i < variants.length; i++) {
-      console.log("variants[i]");
-      console.log(variants[i]);
-      const [a, b, c] = variants[i];
+  //   for (let i = 0; i < variants.length; i++) {
+  //     console.log("variants[i]");
+  //     console.log(variants[i]);
+  //     const [a, b, c] = variants[i];
 
-      if (
-        squares[a] &&
-        squares[a] === squares[b] &&
-        squares[a] === squares[c]
-      ) {
-        return squares[a];
-      }
-    }
-    return null;
-  };
+  //     if (
+  //       squares[a] &&
+  //       squares[a] === squares[b] &&
+  //       squares[a] === squares[c]
+  //     ) {
+  //       return squares[a];
+  //     }
+  //   }
+  //   return null;
+  // };
 
   useEffect(() => {
-    const newWinner = calculateWinner();
+    const newWinner = calculateWinner(squares);
 
     if (newWinner) {
       setWinner(newWinner);
@@ -99,4 +100,4 @@ const Board: React.FC = () => {
   );
 };
 
-export default Board;
+export default MultiGameBoard;
