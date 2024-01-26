@@ -2,6 +2,12 @@
 import React, { useEffect, useState } from "react";
 import Square from "../Square";
 import calculateWinner from "@/app/utils/calculateWinner";
+import {
+  checkLocalStorageBoard,
+  cleanLocalStorage,
+  saveLocalStorageBoard,
+} from "@/app/utils/storage";
+import Link from "next/link";
 // import ChooseIcon from "./ChooseIcon";
 
 type Props = {
@@ -9,17 +15,41 @@ type Props = {
 };
 
 const SingleGameBoard = ({ randomEmoji }: Props) => {
+  const localStorageCheck = checkLocalStorageBoard();
   const [winner, setWinner] = useState<string | null>(null);
 
   const [squares, setSquares] = useState<(string | null)[]>(
-    Array(9).fill(null)
+    localStorageCheck?.squares || Array(9).fill(null)
   );
-  const [currentPlayer, setCurrentPlayer] = useState<string>(randomEmoji);
+  const [currentPlayer, setCurrentPlayer] = useState<string>(
+    localStorageCheck?.currentPlayer || randomEmoji
+  );
 
   ///const
   const [robotIcon, setRobotIcon] = useState<string>("🤖");
-  const [humanIcon, setHumanIcon] = useState<string>(randomEmoji);
+  const [humanIcon, setHumanIcon] = useState<string>(
+    localStorageCheck?.currentPlayer || randomEmoji
+  );
   //
+
+  useEffect(() => {
+    console.log("  useEffect(() => {");
+
+    const newWinner = calculateWinner(squares);
+    setWinner(newWinner);
+
+    saveLocalStorageBoard({
+      squares,
+      currentPlayer,
+      emoji: humanIcon,
+    });
+
+    if (currentPlayer === robotIcon) {
+      setTimeout(() => {
+        moveRobot();
+      }, 300);
+    }
+  }, [currentPlayer]);
 
   const setSquareValue = (index: number) => {
     const newData = squares.map((val, i) => {
@@ -78,23 +108,15 @@ const SingleGameBoard = ({ randomEmoji }: Props) => {
     setSquareValue(emptySquare[randomIndex]);
   };
 
-  useEffect(() => {
-    console.log("  useEffect(() => {");
-
-    const newWinner = calculateWinner(squares);
-    setWinner(newWinner);
-
-    if (currentPlayer === robotIcon) {
-      setTimeout(() => {
-        moveRobot();
-      }, 300);
-    }
-  }, [currentPlayer]);
+  const goHome = () => {
+    cleanLocalStorage();
+    location.reload();
+  };
 
   return (
     <div>
       <div>
-        Human{randomEmoji} - Robbot {robotIcon}
+        Human{humanIcon} - Robbot {robotIcon}
       </div>
       <div className="grid">
         {squares.map((_, i) => {
@@ -111,6 +133,10 @@ const SingleGameBoard = ({ randomEmoji }: Props) => {
       <div>
         <h1>{winner}</h1>
       </div>
+      <Link href="/" onClick={goHome}>
+        {" "}
+        go home
+      </Link>
     </div>
   );
 };

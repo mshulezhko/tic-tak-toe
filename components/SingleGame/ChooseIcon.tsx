@@ -1,11 +1,24 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import SingleGameBoard from "./SingleGameBoard";
+import {
+  checkLocalStorageBoard,
+  cleanLocalStorage,
+  saveLocalStorageBoard,
+  checkLocalStorageEmoji,
+} from "@/app/utils/storage";
+import Link from "next/link";
 
 const ChooseIcon = () => {
+  const localStorageCheckEmoji = checkLocalStorageEmoji();
+  console.log("localStorageCheckEmoji =>ChooseIcon");
+  console.log(localStorageCheckEmoji);
+
   const [randomEmoji, setRandomEmoji] = useState<string>("");
   const [emojiList, setEmojiList] = useState<string[]>([]);
-  const [nextStep, setNextStep] = useState<boolean>(false);
+  const [nextStep, setNextStep] = useState<boolean>(
+    localStorageCheckEmoji ? true : false
+  );
 
   useEffect(() => {
     setEmojiList(["😎", "🤓", "😻", "🤪", "🤗", "😝", "😫"]);
@@ -18,10 +31,24 @@ const ChooseIcon = () => {
 
   const startGame = () => {
     console.log("Start game " + randomEmoji);
+
     if (randomEmoji) {
       setNextStep(true);
+      saveLocalStorageBoard({
+        squares: [],
+        currentPlayer: randomEmoji,
+        emoji: randomEmoji,
+      });
     }
   };
+
+  const goHome = () => {
+    cleanLocalStorage();
+    location.reload();
+  };
+
+  console.log("nextStep ===>");
+  console.log(nextStep);
 
   return (
     <div>
@@ -39,8 +66,13 @@ const ChooseIcon = () => {
             })}
           </div>
           <button onClick={startGame}>Start Game</button>
+          <Link href="/" onClick={goHome}>
+            {" "}
+            go home
+          </Link>{" "}
         </>
       )}
+
       {nextStep && <SingleGameBoard randomEmoji={randomEmoji} />}
     </div>
   );

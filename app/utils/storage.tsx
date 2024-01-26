@@ -55,6 +55,16 @@ const checkLocalStorageBoard = () => {
   return null;
 };
 
+const checkLocalStorageEmoji = () => {
+  const localStorageBoard: Board = getLocalStorageBoard();
+
+  if (localStorageBoard?.emoji) {
+    return localStorageBoard?.emoji;
+  }
+
+  return null;
+};
+
 const cleanLocalStorage = () => {
   localStorage.removeItem("userDataMode");
   localStorage.removeItem("localStorageBoard");
@@ -67,4 +77,5 @@ export {
   saveLocalStorageBoard,
   getLocalStorageBoard,
   checkLocalStorageBoard,
+  checkLocalStorageEmoji,
 };
