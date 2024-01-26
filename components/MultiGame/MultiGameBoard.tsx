@@ -2,42 +2,24 @@
 import React, { useEffect, useState } from "react";
 import Square from "../Square";
 import calculateWinner from "@/app/utils/calculateWinner";
+import {
+  cleanLocalStorage,
+  saveLocalStorageBoard,
+  checkLocalStorageBoard,
+} from "@/app/utils/storage";
+import Link from "next/link";
 
 const MultiGameBoard: React.FC = () => {
+  const localStorageCheck = checkLocalStorageBoard();
+  console.log("localStorageCheck");
+  console.log(localStorageCheck?.currentPlayer);
   const [winner, setWinner] = useState<string | null>(null);
-  const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X");
-  const [squares, setSquares] = useState<(string | null)[]>(
-    Array(9).fill(null)
+  const [currentPlayer, setCurrentPlayer] = useState<string>(
+    localStorageCheck?.currentPlayer || "🐼"
   );
-
-  ///utils
-  // const calculateWinner = () => {
-  //   const variants = [
-  //     [0, 1, 2],
-  //     [3, 4, 5],
-  //     [6, 7, 8],
-  //     [0, 3, 6],
-  //     [1, 4, 7],
-  //     [2, 5, 8],
-  //     [0, 4, 8],
-  //     [2, 4, 6],
-  //   ];
-
-  //   for (let i = 0; i < variants.length; i++) {
-  //     console.log("variants[i]");
-  //     console.log(variants[i]);
-  //     const [a, b, c] = variants[i];
-
-  //     if (
-  //       squares[a] &&
-  //       squares[a] === squares[b] &&
-  //       squares[a] === squares[c]
-  //     ) {
-  //       return squares[a];
-  //     }
-  //   }
-  //   return null;
-  // };
+  const [squares, setSquares] = useState<(string | null)[]>(
+    localStorageCheck?.squares || Array(9).fill(null)
+  );
 
   useEffect(() => {
     const newWinner = calculateWinner(squares);
@@ -49,6 +31,12 @@ const MultiGameBoard: React.FC = () => {
     if (!newWinner && !squares.filter((el) => !el).length) {
       setWinner("It's a Draw");
     }
+
+    saveLocalStorageBoard({
+      squares,
+      currentPlayer,
+      emoji: null,
+    });
   }, [squares]);
 
   //not single game
@@ -62,19 +50,20 @@ const MultiGameBoard: React.FC = () => {
     });
 
     setSquares(newData);
-    setCurrentPlayer(currentPlayer === "X" ? "O" : "X");
+    setCurrentPlayer(currentPlayer === "🐼" ? "🐻" : "🐼");
   };
 
   ///utils
-
   const reset = () => {
     setWinner(null);
-    setCurrentPlayer("X");
+    setCurrentPlayer("🐼");
     setSquares(Array(9).fill(null));
   };
 
-  //single game
-  const setSquareValueAI = () => {};
+  const goHome = () => {
+    cleanLocalStorage();
+    location.reload();
+  };
 
   return (
     <div className="board">
@@ -95,6 +84,10 @@ const MultiGameBoard: React.FC = () => {
 
       <div>
         <button onClick={reset}>play again</button>
+        <Link href="/" onClick={goHome}>
+          {" "}
+          go home
+        </Link>
       </div>
     </div>
   );
