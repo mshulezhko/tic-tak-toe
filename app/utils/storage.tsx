@@ -5,15 +5,9 @@ export type GameMode = {
 
 export type Board = {
   squares: (string | null)[];
-  currentPlayer: string;
+  currentPlayer: string | null;
   emoji: null | string;
 };
-
-// export type userDataType = {
-//   mode: GameMode;
-//   board: (string | null)[];
-//   emoji: null | string;
-// };
 
 const saveToLocalStorageMode = (mode: GameMode) => {
   localStorage.setItem("userDataMode", JSON.stringify(mode));

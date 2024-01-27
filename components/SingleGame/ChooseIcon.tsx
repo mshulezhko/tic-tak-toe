@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import SingleGameBoard from "./SingleGameBoard";
 import {
-  checkLocalStorageBoard,
   cleanLocalStorage,
   saveLocalStorageBoard,
   checkLocalStorageEmoji,
@@ -10,9 +9,7 @@ import {
 import Link from "next/link";
 
 const ChooseIcon = () => {
-  const localStorageCheckEmoji = checkLocalStorageEmoji();
-  console.log("localStorageCheckEmoji =>ChooseIcon");
-  console.log(localStorageCheckEmoji);
+  const localStorageCheckEmoji: null | string = checkLocalStorageEmoji();
 
   const [randomEmoji, setRandomEmoji] = useState<string>("");
   const [emojiList, setEmojiList] = useState<string[]>([]);
@@ -25,13 +22,10 @@ const ChooseIcon = () => {
   }, []);
 
   const chooseEmoji = (e: React.MouseEvent<HTMLElement>) => {
-    console.log(e.currentTarget.innerText);
     setRandomEmoji(e.currentTarget.innerText);
   };
 
   const startGame = () => {
-    console.log("Start game " + randomEmoji);
-
     if (randomEmoji) {
       setNextStep(true);
       saveLocalStorageBoard({
@@ -46,9 +40,6 @@ const ChooseIcon = () => {
     cleanLocalStorage();
     location.reload();
   };
-
-  console.log("nextStep ===>");
-  console.log(nextStep);
 
   return (
     <div>

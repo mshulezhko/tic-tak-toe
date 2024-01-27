@@ -28,8 +28,6 @@ const HomePage = () => {
       setIsSingleMode(localStorageMode.isSingleMode);
       setIsMultiMode(localStorageMode.isMultiMode);
     }
-    console.log("localStorageMode");
-    console.log(localStorageMode);
   }, [isSingleMode, isMultiMode]);
 
   return (

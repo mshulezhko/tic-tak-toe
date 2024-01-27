@@ -8,7 +8,11 @@ type Props = {
 
 const Square = ({ onClick, value, winner }: Props) => {
   if (!value) {
-    return <button onClick={onClick}>jkjkk</button>;
+    return (
+      <button disabled={Boolean(winner)} onClick={onClick}>
+        jkjkk
+      </button>
+    );
   }
 
   return <button>{value}8888</button>;

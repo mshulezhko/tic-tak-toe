@@ -4,11 +4,11 @@ import Square from "../Square";
 import calculateWinner from "@/app/utils/calculateWinner";
 import {
   checkLocalStorageBoard,
+  checkLocalStorageEmoji,
   cleanLocalStorage,
   saveLocalStorageBoard,
 } from "@/app/utils/storage";
 import Link from "next/link";
-// import ChooseIcon from "./ChooseIcon";
 
 type Props = {
   randomEmoji: string;
@@ -16,33 +16,24 @@ type Props = {
 
 const SingleGameBoard = ({ randomEmoji }: Props) => {
   const localStorageCheck = checkLocalStorageBoard();
+  const localStorageCheckEmoji: null | string = checkLocalStorageEmoji();
+  const checkRandomEmoji = randomEmoji ? randomEmoji : localStorageCheckEmoji;
   const [winner, setWinner] = useState<string | null>(null);
 
   const [squares, setSquares] = useState<(string | null)[]>(
     localStorageCheck?.squares || Array(9).fill(null)
   );
-  const [currentPlayer, setCurrentPlayer] = useState<string>(
-    localStorageCheck?.currentPlayer || randomEmoji
+
+  const [currentPlayer, setCurrentPlayer] = useState<string | null>(
+    randomEmoji || (localStorageCheck?.currentPlayer as string) || ""
   );
 
-  ///const
-  const [robotIcon, setRobotIcon] = useState<string>("🤖");
-  const [humanIcon, setHumanIcon] = useState<string>(
-    localStorageCheck?.currentPlayer || randomEmoji
-  );
-  //
+  const robotIcon: string = "🤖";
+  const humanIcon: string | null = checkRandomEmoji;
 
   useEffect(() => {
-    console.log("  useEffect(() => {");
-
     const newWinner = calculateWinner(squares);
     setWinner(newWinner);
-
-    saveLocalStorageBoard({
-      squares,
-      currentPlayer,
-      emoji: humanIcon,
-    });
 
     if (currentPlayer === robotIcon) {
       setTimeout(() => {
@@ -52,21 +43,31 @@ const SingleGameBoard = ({ randomEmoji }: Props) => {
   }, [currentPlayer]);
 
   const setSquareValue = (index: number) => {
-    const newData = squares.map((val, i) => {
-      if (i === index) {
-        return currentPlayer;
-      }
+    if (!calculateWinner(squares)) {
+      const newData = squares.map((val, i) => {
+        if (i === index) {
+          return currentPlayer;
+        }
 
-      return val;
-    });
+        return val;
+      });
 
-    setSquares(newData);
-    setCurrentPlayer(currentPlayer === randomEmoji ? robotIcon : randomEmoji);
+      const currentPlayerConditions =
+        currentPlayer === checkRandomEmoji ? robotIcon : checkRandomEmoji;
+
+      setSquares(newData);
+      setCurrentPlayer(currentPlayerConditions);
+
+      saveLocalStorageBoard({
+        squares: newData,
+        currentPlayer: currentPlayerConditions,
+        emoji: humanIcon,
+      });
+    }
   };
 
   const moveRobot = () => {
     // Check if the robot can win in the next move
-
     for (let i = 0; i < squares.length; i++) {
       if (!squares[i]) {
         const tempSquares = [...squares];
@@ -93,10 +94,7 @@ const SingleGameBoard = ({ randomEmoji }: Props) => {
     }
 
     // If no immediate winning or blocking move, make a random move
-
     const emptySquare: number[] = [];
-    console.log("squares +++++");
-    console.log(squares);
     squares.forEach((element, index) => {
       if (!element) {
         emptySquare.push(index);
