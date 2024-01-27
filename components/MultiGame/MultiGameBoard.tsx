@@ -22,6 +22,7 @@ const MultiGameBoard: React.FC = () => {
   );
 
   useEffect(() => {
+    //utils newWinner
     const newWinner = calculateWinner(squares);
 
     if (newWinner) {

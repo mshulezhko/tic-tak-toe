@@ -8,7 +8,7 @@ import {
   cleanLocalStorage,
   saveLocalStorageBoard,
 } from "@/app/utils/storage";
-import Link from "next/link";
+import WinnerPopup from "../WinnerPopup";
 
 type Props = {
   randomEmoji: string;
@@ -32,13 +32,20 @@ const SingleGameBoard = ({ randomEmoji }: Props) => {
   const humanIcon: string | null = checkRandomEmoji;
 
   useEffect(() => {
+    //utils newWinner
     const newWinner = calculateWinner(squares);
-    setWinner(newWinner);
+    if (newWinner) {
+      setWinner(newWinner === humanIcon ? "You win! 🥳" : "You lost!");
+    }
+
+    if (!newWinner && !squares.filter((el) => !el).length) {
+      setWinner("It's a Draw");
+    }
 
     if (currentPlayer === robotIcon) {
       setTimeout(() => {
         moveRobot();
-      }, 300);
+      }, 900);
     }
   }, [currentPlayer]);
 
@@ -73,6 +80,9 @@ const SingleGameBoard = ({ randomEmoji }: Props) => {
         const tempSquares = [...squares];
         tempSquares[i] = robotIcon;
 
+        console.log(" Check if the robot can win in the next move");
+        console.log(calculateWinner(tempSquares) === robotIcon);
+
         if (calculateWinner(tempSquares) === robotIcon) {
           setSquareValue(i);
           return;
@@ -85,6 +95,8 @@ const SingleGameBoard = ({ randomEmoji }: Props) => {
       if (!squares[i]) {
         const tempSquares = [...squares];
         tempSquares[i] = randomEmoji;
+        console.log("Check if the human can win in the next move");
+        console.log(calculateWinner(tempSquares) === randomEmoji);
 
         if (calculateWinner(tempSquares) === randomEmoji) {
           setSquareValue(i);
@@ -102,6 +114,7 @@ const SingleGameBoard = ({ randomEmoji }: Props) => {
     });
 
     const randomIndex: number = Math.floor(Math.random() * emptySquare.length);
+    console.log("If no immediate winning or blocking move, make a random move");
 
     setSquareValue(emptySquare[randomIndex]);
   };
@@ -111,30 +124,48 @@ const SingleGameBoard = ({ randomEmoji }: Props) => {
     location.reload();
   };
 
+  const reset = () => {
+    setWinner(null);
+    setCurrentPlayer(humanIcon);
+    setSquares(Array(9).fill(null));
+  };
+
   return (
     <div>
-      <div>
-        Human{humanIcon} - Robbot {robotIcon}
-      </div>
-      <div className="grid">
-        {squares.map((_, i) => {
-          return (
-            <Square
-              key={i}
-              onClick={() => setSquareValue(i)}
-              value={squares[i]}
-              winner={winner}
-            />
-          );
-        })}
-      </div>
-      <div>
-        <h1>{winner}</h1>
-      </div>
-      <Link href="/" onClick={goHome}>
-        {" "}
-        go home
-      </Link>
+      {!winner && (
+        <div className="single-game-board-wrap">
+          <div className="player-wrap">
+            <div
+              className={`player ${
+                currentPlayer === humanIcon ? "currentPlayer" : ""
+              }`}
+            >
+              {humanIcon}
+            </div>{" "}
+            <div
+              className={`player ${
+                currentPlayer === robotIcon ? "currentPlayer" : ""
+              }`}
+            >
+              {robotIcon}
+            </div>{" "}
+          </div>
+          <div className="grid">
+            {squares.map((_, i) => {
+              return (
+                <Square
+                  key={i}
+                  onClick={() => setSquareValue(i)}
+                  value={squares[i]}
+                  winner={winner}
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
+      {/* /// */}
+      {winner && <WinnerPopup winner={winner} reset={reset} goHome={goHome} />}
     </div>
   );
 };

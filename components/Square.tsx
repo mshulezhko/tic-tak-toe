@@ -9,13 +9,15 @@ type Props = {
 const Square = ({ onClick, value, winner }: Props) => {
   if (!value) {
     return (
-      <button disabled={Boolean(winner)} onClick={onClick}>
-        jkjkk
-      </button>
+      <button
+        className="square-btn"
+        disabled={Boolean(winner)}
+        onClick={onClick}
+      ></button>
     );
   }
 
-  return <button>{value}8888</button>;
+  return <button className="square-btn">{value}</button>;
 };
 
 export default Square;

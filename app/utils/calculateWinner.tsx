@@ -13,7 +13,6 @@ const calculateWinner = (squares: winnerType[]): winnerType => {
   ];
 
   for (let i = 0; i < variants.length; i++) {
-    console.log(variants[i]);
     const [a, b, c] = variants[i];
 
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {

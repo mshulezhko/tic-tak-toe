@@ -2,10 +2,11 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  width: 300px;
-  height: 300px;
-
+  grid-template-columns: repeat(3, 136px);
+  grid-template-rows: repeat(3, 136px);
+  width: 400px;
+  height: 400px;
+  gap: 10px
 }
 
 * {
@@ -69,8 +70,9 @@ footer a {
   animation: typing 6s steps(8) infinite, blink-caret 0.5s step-end infinite;
 }
 
-.container-home-btn {
-  margin-top: 20px;
+.container-home-btn,
+.container-choose-btn {
+  margin-top: 30px;
   display: flex;
   justify-content: center;
   gap: 20px
@@ -113,4 +115,94 @@ footer a {
     border-right-color: #3F3F3F;
     /* Simulate a cursor */
   }
+}
+
+
+
+.choose-emoji-title {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+.emoji-choose-wrap {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  place-items: center;
+  width: 380px;
+}
+
+.choose-emoji-square {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  background-color: whitesmoke;
+  font-size: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.choose-emoji-square.selected {
+  box-shadow: #13547a 0px 8px 24px;
+}
+
+.play,
+.goHome {
+  padding: 16px 30px;
+  font-size: 26px;
+  border: none;
+  border-radius: 8px;
+  background: radial-gradient(328px at 2.9% 15%, rgb(191, 224, 251) 0%, rgb(232, 233, 251) 25.8%, rgb(252, 239, 250) 50.8%, rgb(234, 251, 251) 77.6%, rgb(240, 251, 244) 100.7%);
+  transition: all 0.5s;
+}
+
+.goHome {
+  text-decoration: none;
+  color: white;
+  background: linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%);
+}
+
+.play:hover,
+.goHome:hover,
+.choose-emoji-square:hover,
+.choose-emoji-square::after {
+  box-shadow: #13547a 0px 8px 24px;
+}
+
+.choose-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.player-wrap {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30px;
+  font-size: 40px;
+  border: 1px #3F3F3F solid;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #13547a;
+}
+
+.currentPlayer {
+  background-color: rgb(191, 224, 251);
+  padding: 3px 60px;
+  border-radius: 8px;
+  transition: all 0.8s;
+}
+
+.winner-popup {
+  background-color: white;
+  padding: 80px;
+  border-radius: 8px;
+}
+
+.square-btn {
+  font-size: 30px;
+  padding: 50px;
 }

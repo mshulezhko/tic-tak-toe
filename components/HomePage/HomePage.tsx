@@ -7,6 +7,7 @@ import {
   GameMode,
   getLocalStorageMode,
 } from "@/app/utils/storage";
+import Footer from "../Footer";
 
 const HomePage = () => {
   const [isSingleMode, setIsSingleMode] = useState<boolean>(false);
@@ -31,19 +32,26 @@ const HomePage = () => {
   }, [isSingleMode, isMultiMode]);
 
   return (
-    <div>
+    <div className="container">
       {!isMultiMode && !isSingleMode && (
-        <div>
-          <h1>Tic Tac Toe</h1>
-          <div className="wrap-btn-mode">
-            <button onClick={() => setIsSingleMode(true)}>Single Player</button>
-            <button onClick={() => setIsMultiMode(true)}>Multi Player</button>
+        <div className="container-home">
+          <h1 className="title">
+            Tic <span className="title-animation typing">Tac Toe</span>
+          </h1>
+          <div className="container-home-btn">
+            <button className="mode-btn" onClick={() => setIsSingleMode(true)}>
+              Single Player
+            </button>
+            <button className="mode-btn" onClick={() => setIsMultiMode(true)}>
+              Multi Player
+            </button>
           </div>
         </div>
       )}
 
       {isMultiMode && <MultiGameBoard />}
       {isSingleMode && <ChooseIcon />}
+      <Footer />
     </div>
   );
 };

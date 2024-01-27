@@ -16,10 +16,15 @@ const ChooseIcon = () => {
   const [nextStep, setNextStep] = useState<boolean>(
     localStorageCheckEmoji ? true : false
   );
+  const [selectedEmoji, setSelectedEmoji] = useState<null | string>(null);
 
   useEffect(() => {
-    setEmojiList(["😎", "🤓", "😻", "🤪", "🤗", "😝", "😫"]);
+    setEmojiList(["😎", "🤓", "🤪", "🤗", "😝", "😫"]);
   }, []);
+
+  // const selectEmoji = () => {
+  //   setSelectedEmoji("selected");
+  // };
 
   const chooseEmoji = (e: React.MouseEvent<HTMLElement>) => {
     setRandomEmoji(e.currentTarget.innerText);
@@ -42,25 +47,35 @@ const ChooseIcon = () => {
   };
 
   return (
-    <div>
+    <div className="choose-container">
       {!nextStep && (
         <>
           {" "}
-          <h1>Choose your emoji</h1>
+          <h1 className="choose-emoji-title">Choose your emoji</h1>
           <div className="emoji-choose-wrap">
             {emojiList.map((emj, idx) => {
               return (
-                <div key={idx} onClick={chooseEmoji}>
+                <div
+                  key={idx}
+                  className={`choose-emoji-square ${
+                    randomEmoji === emj ? "selected" : ""
+                  }`}
+                  onClick={chooseEmoji}
+                >
                   {emj}
                 </div>
               );
             })}
           </div>
-          <button onClick={startGame}>Start Game</button>
-          <Link href="/" onClick={goHome}>
-            {" "}
-            go home
-          </Link>{" "}
+          <div className="container-choose-btn">
+            <Link className="goHome" href="/" onClick={goHome}>
+              {" "}
+              Back
+            </Link>{" "}
+            <button className="play" onClick={startGame}>
+              Play
+            </button>
+          </div>
         </>
       )}
 
