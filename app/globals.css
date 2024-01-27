@@ -1,7 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap');
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   width: 300px;
   height: 300px;
 
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Rubik', sans-serif;
+  color: #3F3F3F
+}
+
+button {
+  cursor: pointer;
+}
+
+footer {
+  position: absolute;
+  bottom: 10px;
+  color: whitesmoke;
+}
+
+footer a {
+  color: whitesmoke;
+}
+
+.main {
+  height: 100vh;
+  width: 100%;
+}
+
+.container {
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.title {
+  color: white;
+  font-weight: 700;
+  font-size: 70px;
+  white-space: nowrap;
+  width: 350px;
+}
+
+
+
+.title-animation {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  /* Adjust as needed */
+  border-right: 8px solid #3F3F3F;
+  /* Simulate a cursor */
+  white-space: nowrap;
+}
+
+.typing {
+  color: white;
+  animation: typing 6s steps(8) infinite, blink-caret 0.5s step-end infinite;
+}
+
+.container-home-btn {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px
+}
+
+.mode-btn {
+  padding: 15px 30px;
+  font-size: 20px;
+  font-weight: 400;
+  border-radius: 8px;
+  border: none;
+}
+
+.mode-btn:hover {
+  background-color: rgb(238, 232, 232);
+}
+
+@keyframes typing {
+
+  0%,
+  50%,
+  100% {
+    width: 0;
+  }
+
+  25%,
+  75% {
+    width: 70%;
+  }
+}
+
+@keyframes blink-caret {
+
+  from,
+  to {
+    border-right-color: transparent;
+  }
+
+  50% {
+    border-right-color: #3F3F3F;
+    /* Simulate a cursor */
+  }
 }
