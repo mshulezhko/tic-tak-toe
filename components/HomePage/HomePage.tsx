@@ -12,10 +12,9 @@ import Footer from "../Footer";
 const HomePage = () => {
   const [isSingleMode, setIsSingleMode] = useState<boolean>(false);
   const [isMultiMode, setIsMultiMode] = useState<boolean>(false);
+  const localStorageMode: GameMode = getLocalStorageMode();
 
   useEffect(() => {
-    const localStorageMode: GameMode = getLocalStorageMode();
-
     if (isSingleMode || isMultiMode) {
       const localStorageData: GameMode = {
         isSingleMode,
