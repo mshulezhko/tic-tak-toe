@@ -4,8 +4,8 @@
   display: grid;
   grid-template-columns: repeat(3, 136px);
   grid-template-rows: repeat(3, 136px);
-  width: 400px;
-  height: 400px;
+  width: 422px;
+  height: 422px;
   gap: 10px
 }
 
@@ -187,6 +187,8 @@ footer a {
   border-radius: 8px;
   padding: 10px;
   background-color: #13547a;
+  width: 400px;
+  height: 60px;
 }
 
 .currentPlayer {
@@ -206,4 +208,113 @@ footer a {
   font-size: 40px;
   padding: 50px;
   border-radius: 8px;
+}
+
+.single-game-board-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* width: 500px; */
+}
+
+@media only screen and (max-width: 600px) {
+
+  .title,
+  .title-animation {
+    font-size: 60px;
+    white-space: nowrap;
+    width: 310px;
+  }
+
+  .container-home-btn {
+    flex-direction: column;
+  }
+
+  .grid {
+    grid-template-columns: repeat(3, 120px);
+    grid-template-rows: repeat(3, 120px);
+    width: 380px;
+    height: 380px;
+  }
+
+  .player-wrap {
+    width: 350px;
+    height: 50px;
+  }
+
+  .square-btn {
+    padding: 0;
+  }
+
+  .winner-popup {
+    background-color: white;
+    padding: 20px 60px;
+    border-radius: 8px;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+
+  .title,
+  .title-animation {
+    font-size: 60px;
+    white-space: nowrap;
+    width: 310px;
+  }
+
+  .container-home-btn {
+    flex-direction: column;
+  }
+
+  .grid {
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    width: 300px;
+    height: 300px;
+    gap: 5px;
+  }
+}
+
+@media only screen and (max-width: 376px) {
+  .container-home-btn {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mode-btn {
+    padding: 15px 20px;
+    width: 200px;
+  }
+
+  .emoji-choose-wrap {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    place-items: center;
+    width: 300px;
+  }
+
+  .choose-emoji-square {
+    width: 70px;
+    height: 70px;
+    font-size: 50px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(3, 80px);
+    grid-template-rows: repeat(3, 80px);
+    gap: 5px;
+    width: 250px;
+  }
+
+  .square-btn {
+    padding: 0;
+  }
+
+  .player-wrap {
+    width: 300px;
+    height: 50px;
+  }
 }
