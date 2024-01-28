@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Square from "../Square";
-import calculateWinner from "@/app/utils/calculateWinner";
+import calculateWinner, { whoWonConditions } from "@/app/utils/calculateWinner";
 import {
   checkLocalStorageBoard,
   checkLocalStorageEmoji,
@@ -9,6 +9,7 @@ import {
   saveLocalStorageBoard,
 } from "@/app/utils/storage";
 import WinnerPopup from "../WinnerPopup";
+import Player from "../Player";
 
 type Props = {
   randomEmoji: string;
@@ -32,15 +33,9 @@ const SingleGameBoard = ({ randomEmoji }: Props) => {
   const humanIcon: string | null = checkRandomEmoji;
 
   useEffect(() => {
-    //utils newWinner
     const newWinner = calculateWinner(squares);
-    if (newWinner) {
-      setWinner(newWinner === humanIcon ? "You win! 🥳" : "You lost!");
-    }
 
-    if (!newWinner && !squares.filter((el) => !el).length) {
-      setWinner("It's a Draw");
-    }
+    setWinner(whoWonConditions(newWinner, humanIcon, squares));
 
     if (currentPlayer === robotIcon) {
       setTimeout(() => {
@@ -80,9 +75,6 @@ const SingleGameBoard = ({ randomEmoji }: Props) => {
         const tempSquares = [...squares];
         tempSquares[i] = robotIcon;
 
-        console.log(" Check if the robot can win in the next move");
-        console.log(calculateWinner(tempSquares) === robotIcon);
-
         if (calculateWinner(tempSquares) === robotIcon) {
           setSquareValue(i);
           return;
@@ -94,11 +86,9 @@ const SingleGameBoard = ({ randomEmoji }: Props) => {
     for (let i = 0; i < squares.length; i++) {
       if (!squares[i]) {
         const tempSquares = [...squares];
-        tempSquares[i] = randomEmoji;
-        console.log("Check if the human can win in the next move");
-        console.log(calculateWinner(tempSquares) === randomEmoji);
+        tempSquares[i] = checkRandomEmoji;
 
-        if (calculateWinner(tempSquares) === randomEmoji) {
+        if (calculateWinner(tempSquares) === checkRandomEmoji) {
           setSquareValue(i);
           return;
         }
@@ -114,8 +104,6 @@ const SingleGameBoard = ({ randomEmoji }: Props) => {
     });
 
     const randomIndex: number = Math.floor(Math.random() * emptySquare.length);
-    console.log("If no immediate winning or blocking move, make a random move");
-
     setSquareValue(emptySquare[randomIndex]);
   };
 
@@ -134,22 +122,11 @@ const SingleGameBoard = ({ randomEmoji }: Props) => {
     <div>
       {!winner && (
         <div className="single-game-board-wrap">
-          <div className="player-wrap">
-            <div
-              className={`player ${
-                currentPlayer === humanIcon ? "currentPlayer" : ""
-              }`}
-            >
-              {humanIcon}
-            </div>{" "}
-            <div
-              className={`player ${
-                currentPlayer === robotIcon ? "currentPlayer" : ""
-              }`}
-            >
-              {robotIcon}
-            </div>{" "}
-          </div>
+          <Player
+            currentPlayer={currentPlayer}
+            personOne={humanIcon}
+            personTwo={robotIcon}
+          />
           <div className="grid">
             {squares.map((_, i) => {
               return (
