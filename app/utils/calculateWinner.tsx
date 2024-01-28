@@ -22,4 +22,20 @@ const calculateWinner = (squares: winnerType[]): winnerType => {
   return null;
 };
 
+export const whoWonConditions = (
+  newWinner: string | null,
+  personOne: string | null,
+  squares: (string | null)[]
+) => {
+  if (newWinner) {
+    return newWinner === personOne ? "You win! 🥳" : "You lost!";
+  }
+
+  if (!newWinner && !squares.filter((el) => !el).length) {
+    return "It's a Draw!";
+  }
+
+  return null;
+};
+
 export default calculateWinner;
