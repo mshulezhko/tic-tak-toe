@@ -1,18 +1,17 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Square from "../Square";
-import calculateWinner from "@/app/utils/calculateWinner";
+import calculateWinner, { whoWonConditions } from "@/app/utils/calculateWinner";
 import {
   cleanLocalStorage,
   saveLocalStorageBoard,
   checkLocalStorageBoard,
 } from "@/app/utils/storage";
-import Link from "next/link";
+import WinnerPopup from "../WinnerPopup";
+import Player from "../Player";
 
 const MultiGameBoard: React.FC = () => {
   const localStorageCheck = checkLocalStorageBoard();
-  console.log("localStorageCheck");
-  console.log(localStorageCheck?.currentPlayer);
   const [winner, setWinner] = useState<string | null>(null);
   const [currentPlayer, setCurrentPlayer] = useState<string>(
     localStorageCheck?.currentPlayer || "🐼"
@@ -20,13 +19,14 @@ const MultiGameBoard: React.FC = () => {
   const [squares, setSquares] = useState<(string | null)[]>(
     localStorageCheck?.squares || Array(9).fill(null)
   );
+  const personOne = "🐼";
+  const personTwo = "🐻";
 
   useEffect(() => {
-    //utils newWinner
     const newWinner = calculateWinner(squares);
 
     if (newWinner) {
-      setWinner(newWinner);
+      setWinner(`Player ${newWinner} is winner!`);
     }
 
     if (!newWinner && !squares.filter((el) => !el).length) {
@@ -67,29 +67,30 @@ const MultiGameBoard: React.FC = () => {
   };
 
   return (
-    <div className="board">
-      <h1>{winner}</h1>
-      <div className="board-header">Hello{currentPlayer}</div>
-      <div className="grid">
-        {squares.map((_, i) => {
-          return (
-            <Square
-              key={i}
-              onClick={() => setSquareValue(i)}
-              value={squares[i]}
-              winner={winner}
-            />
-          );
-        })}
-      </div>
+    <div>
+      {!winner && (
+        <div className="single-game-board-wrap">
+          <Player
+            currentPlayer={currentPlayer}
+            personOne={personOne}
+            personTwo={personTwo}
+          />
+          <div className="grid">
+            {squares.map((_, i) => {
+              return (
+                <Square
+                  key={i}
+                  onClick={() => setSquareValue(i)}
+                  value={squares[i]}
+                  winner={winner}
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
 
-      <div>
-        <button onClick={reset}>play again</button>
-        <Link href="/" onClick={goHome}>
-          {" "}
-          go home
-        </Link>
-      </div>
+      {winner && <WinnerPopup winner={winner} reset={reset} goHome={goHome} />}
     </div>
   );
 };
