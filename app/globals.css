@@ -203,6 +203,7 @@ footer a {
 }
 
 .square-btn {
-  font-size: 30px;
+  font-size: 40px;
   padding: 50px;
+  border-radius: 8px;
 }
