@@ -14,11 +14,14 @@ const saveToLocalStorageMode = (mode: GameMode) => {
 };
 
 const getLocalStorageMode = () => {
-  const userDataMode = localStorage.getItem("userDataMode");
+  if (typeof window !== "undefined") {
+    const userDataMode = localStorage.getItem("userDataMode");
 
-  if (userDataMode) return JSON.parse(userDataMode);
+    if (userDataMode) return JSON.parse(userDataMode);
+  }
+
+  return null;
 };
-
 const saveLocalStorageBoard = ({
   squares,
   currentPlayer,
